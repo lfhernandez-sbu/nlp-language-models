@@ -1,32 +1,38 @@
 def compute_bigram_probability():
-    text = add_edge_markers(
-        "This ratio is called This ratio is called the relative frequency the use of relative frequency as a way to esitmate This ratio")
-    corpus = text.split()
-    bigrams = to_bigram_list(corpus)
-    for bigram in bigrams:
-        print(bigram + " = " + str(count_bigram_occurence(bigram, bigrams)))
+    text = "This ratio is called This ratio is called the relative frequency the use of relative frequency as a way to esitmate This ratio"
+    augmented_text = add_edge_markers(text)
+    corpus = augmented_text.lower().split()
+    bigram_set = generate_bigram_list(corpus)
+    for bigram in bigram_set:
+        print(bigram + " = " + str(count_bigram_occurence(bigram, bigram_set)))
 
 
 def add_edge_markers(corpus):
     return "<s> " + corpus + " </s>"
 
 
-def to_bigram_list(corpus):
+def generate_bigram_list(corpus):
     bigrams = []
     for word in range(len(corpus) - 1):
         current = corpus[word] + " " + corpus[word + 1]
-        if current not in bigrams:
-            bigrams.append(current)
+        # if current not in bigrams:
+        bigrams.append(current)
     return bigrams
 
 
-def count_bigram_occurence(bigram, corpus):
+def count_bigram_occurence(bigram, set):
     count = 0
-    for currentBigram in corpus:
-        if bigram is currentBigram:
+    for current_bigram in set:
+        if current_bigram == bigram:
             count += 1
     # Subtract edge-markers from total count of words in corpus
-    return round(count / (len(corpus) - 2), 2)
+    return round(count / (len(set) - 2), 2)
 
+def count_unigram_occurences(word, corpus):
+    count = 0
+    for current_word in corpus:
+        if current_word == word:
+            count += 1
+    return count
 
 compute_bigram_probability()
