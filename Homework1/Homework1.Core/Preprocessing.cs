@@ -10,7 +10,7 @@ namespace Homework1.Core
 {
     public class Preprocessing
     {
-        public static ICollection<string> DumbTokenizer(ICollection<string> senteces)
+        public static List<string> DumbTokenizer(List<string> senteces)
         {
             var tokens = new List<string>();
             string[] tokenArray;
@@ -28,28 +28,51 @@ namespace Homework1.Core
             return tokens;
         }
 
-        public static ICollection<string> DumbSentenceSegmentor(string[] corpus)
+        public static List<string> DumbSentenceSegmentor(string[] corpus)
         {
             var sentences = new List<string>();
-            string[] sentenceArray;
             foreach (var line in corpus)
             {
-                sentenceArray = line.Split('.');
+                var sentenceArray = line.Split('.');
                 foreach (var sentence in sentenceArray)
                     if (!sentence.Equals("\n") || !sentence.Equals(""))
                     {
                         sentences.Add(sentence);
                     }
-
             }
             return sentences;
         }
 
-        public static string[] ReadFile(string _filePath)
+
+        public static string GenerateBigram(string precedingWord, string currentWord)
         {
-            string[] corpus = System.IO.File.ReadAllLines(_filePath);
-            return corpus;
+            var bigram = precedingWord + " " + currentWord;
+            return bigram;
         }
 
+
+        public static List<string> GenerateBigramList(List<string> corpus)
+        {
+            var bigramList = new List<string>();
+            for (var i = 0; i < corpus.Count - 1; i++)
+            {
+                var currentBigram = corpus[i] + " " + corpus[i + 1];
+                bigramList.Add(currentBigram);
+            }
+            return bigramList;
+        }
+
+
+        public static string AddEdgeMarkers(string bigramSet)
+        {
+            return "<s> " + bigramSet + " </s>";
+        }
+
+
+        public static string[] ReadFile(string _filePath)
+        {
+            string[] corpus = File.ReadAllLines(_filePath);
+            return corpus;
+        }
     }
 }

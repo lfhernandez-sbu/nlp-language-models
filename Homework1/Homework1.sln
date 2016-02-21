@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homework1.Core", "Homework1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homework1.App", "Homework1.App\Homework1.App.csproj", "{0FE1C986-90BD-4F94-A025-7909073E789C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C769BD90-1D87-4B1C-9C9F-CE4EFD082E72}"
+	ProjectSection(SolutionItems) = preProject
+		train.txt = train.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
