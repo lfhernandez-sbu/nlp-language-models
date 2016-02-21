@@ -6,12 +6,14 @@ def dumb_sentence_segmenter(file):
     lines = corpus.read().split('.')
     return lines
 
+
 def smart_sentence_segmenter(file):
     corpus = open(file, 'r')
     segmentedList = []
     for line in corpus:
         segmentedList.append(re.split(r'[.,;:_!*()\[\]?\"\-\n]', line))
     return segmentedList
+
 
 def dumb_tokenizer(sentence):
     # TODO account for empty arrays
@@ -33,5 +35,6 @@ def main():
 
     for token in tokens:
         print(token)
+
 
 main()
