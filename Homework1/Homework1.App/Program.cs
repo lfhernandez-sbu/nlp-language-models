@@ -16,32 +16,17 @@ namespace Homework1.App
             //var corpus = Preprocessing.DumbSentenceSegmentor(text);
             //var tokenizedCorpus = Preprocessing.DumbTokenizer(corpus);
             //tokenizedCorpus = new List<string>(tokenizedCorpus.RemoveAll(string.IsNullOrEmpty));
+            
+            var test = "A fat dog is a fat dog only when other fat dogs say he is a fat dog";
+            var tokens = Preprocessing.DumbTokenizer(test);
 
-            // running total of estimation method probabilities
-            var mlep = 0.0;
-            var lsp = 0.0;
-            var adp = 0.0;
-
-            var test = new List<string> {"A fat dog is a fat dog only when other fat dogs say he is a fat dog", ""};
-            var augmentedText = Preprocessing.AddEdgeMarkers(test[0]);
-            var tokenCorpus = augmentedText.ToLower().Split(' ').ToList();
-            var bigramList = Preprocessing.GenerateBigramList(tokenCorpus);
-
-            for (var i = 0; i < bigramList.Count; i++)
+            for (var i = 0; i < tokens.Count - 1; i++)
             {
-                var mle = EstimationMethods.MaximumLikelihoodEstimate(bigramList[i], bigramList[i + 1], bigramList, test);
-                var ls = EstimationMethods.LaplaceSmoothing(bigramList[i], bigramList[i + 1], bigramList, test);
-                var ads = EstimationMethods.AbsoluteDiscounting(bigramList[i], bigramList[i + 1], bigramList, test);
-                Console.WriteLine("P(" + bigramList[i] + " | " + bigramList[i + 1] + ")" + " = " + mle.ToString());
-                mlep += Math.Log(mle, 2);
-                lsp += Math.Log(ls, 2);
-                adp += Math.Log(ads, 2);
+                var mle = EstimationMethods.MaximumLikelihoodEstimate(tokens[i], tokens[i + 1], tokens);
+                var ls = EstimationMethods.LaplaceSmoothing(tokens[i], tokens[i + 1], tokens);
+                var ads = EstimationMethods.AbsoluteDiscounting(tokens[i], tokens[i + 1], tokens);
+                Console.WriteLine("P(" + tokens[i] + " | " + tokens[i + 1] + ")" + " = " + mle.ToString());
             }
-            mlep = Math.Pow(mlep, 2);
-            lsp = Math.Pow(lsp, 2);
-            adp = Math.Pow(adp, 2);
-            Console.WriteLine("mle = " + mlep.ToString() + "\nls = " + lsp.ToString() + "\nabsolute discounting = " + adp.ToString());
-
             Console.ReadKey();
         }
     }

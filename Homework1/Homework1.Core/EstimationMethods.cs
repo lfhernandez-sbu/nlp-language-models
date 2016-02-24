@@ -8,40 +8,61 @@ namespace Homework1.Core
 {
     public class EstimationMethods
     {
-        public static double AbsoluteDiscounting(string precedingWord, string currentWord, List<string> bigramSet, List<string> corpus)
+        public static double AbsoluteDiscounting(string precedingWord, string currentWord, List<string> tokens)
         {
-            var bigram = Preprocessing.GenerateBigram(precedingWord, currentWord);
-            return (CountNgramOcurrence(bigram, bigramSet) - 0.5) / CountNgramOcurrence(bigram, bigramSet);
+            var bigram = new string[] { precedingWord, currentWord };
+            var unigram = new string[] { precedingWord };
+            return (CountNGgramOcurrence(bigram, tokens) - 0.5) / CountNGgramOcurrence(unigram, tokens);
         }
 
 
-        public static double LaplaceSmoothing(string precedingWord, string currentWord, List<string>bigramSet, List<string> corpus)
+        public static double LaplaceSmoothing(string precedingWord, string currentWord, List<string> tokens)
         {
-            var bigram = Preprocessing.GenerateBigram(precedingWord, currentWord);
-            return (CountNgramOcurrence(bigram, bigramSet) + 1) / (CountNgramOcurrence(precedingWord, corpus) + GetVocabulary(corpus).Count());
+            var bigram = new string[] { precedingWord, currentWord };
+            var unigram = new string[] { precedingWord };
+            return ((double)CountNGgramOcurrence(bigram, tokens) + 1) / (CountNGgramOcurrence(unigram, tokens) + GetVocabulary(tokens).Count());
         }
 
 
-        public static double MaximumLikelihoodEstimate(string precedingWord, string currentWord, List<string> bigramSet, List<string> corpus)
+        public static double MaximumLikelihoodEstimate(string precedingWord, string currentWord, List<string> tokens)
         {
-            var bigram = Preprocessing.GenerateBigram(precedingWord, currentWord);
-            return CountNgramOcurrence(bigram, bigramSet) / CountNgramOcurrence(precedingWord, corpus);
+            var bigram = new string[] { precedingWord, currentWord };
+            var unigram = new string[] { precedingWord };
+            return ((double)CountNGgramOcurrence(bigram, tokens) / CountNGgramOcurrence(unigram, tokens));
         }
 
+        public static double KatzBackOffEstimate(string precedingWord, string currentWord, List<string> tokens)
+        {
+            Func<string, string, double> betaFunc = (x, y) =>
+            {
+                //var numerator = AbsoluteDiscounting(y);
+                //var denominator;
 
-        public static int CountNgramOcurrence(string ngram, List<string> set)
+                return 0.0;
+
+            };
+            return 0.0;
+        }
+        public static int CountNGgramOcurrence(string[] nGram, List<string> tokens)
         {
             var count = 0;
-            foreach (var currentNgram in set)
+            for (var i = 0; i < tokens.Count - 1; i++)
             {
-                if (currentNgram.Equals(ngram))
+                var exists = true;
+
+                for(var k = 0; k < nGram.Length; k++)
                 {
-                    count += 1;
+                    if(!tokens[i + k].Equals(nGram[k]))
+                    {
+                        exists = false;
+                        break;
+                    }
                 }
+                if (exists)
+                    count++;
             }
             return count;
         }
-
 
         public static List<string> GetVocabulary(List<string> corpus)
         {

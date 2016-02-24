@@ -8,45 +8,38 @@ using System.Text.RegularExpressions;
 
 namespace Homework1.Core
 {
-    public class Preprocessing
+    public static class Preprocessing
     {
-        public static List<string> DumbTokenizer(List<string> senteces)
+        public static List<string> DumbSentenceSegmentor(string corpus)
         {
-            var tokens = new List<string>();
-            string[] tokenArray;
-            foreach (var sentece in senteces)
-            {
-                tokenArray = sentece.Split(' ');
-                foreach (var word in tokenArray)
-                {
-                    if (!word.Equals("\n") || !word.Equals(""))
-                    {
-                        tokens.Add(word);
-                    }
-                }
-            }
-            return tokens;
-        }
-
-        public static List<string> DumbSentenceSegmentor(string[] corpus)
-        {
+            corpus = corpus.Replace('\n', ' ');
             var sentences = new List<string>();
-            foreach (var line in corpus)
+            var sentenceArray = corpus.Split('.');
+
+            foreach (var sentence in sentenceArray)
             {
-                var sentenceArray = line.Split('.');
-                foreach (var sentence in sentenceArray)
-                    if (!sentence.Equals("\n") || !sentence.Equals(""))
-                    {
-                        sentences.Add(sentence);
-                    }
+                if (!string.IsNullOrWhiteSpace(sentence))
+                {
+                    sentences.Add(sentence);
+                }
             }
             return sentences;
         }
 
 
-        public static string GenerateBigram(string precedingWord, string currentWord)
+        public static List<string> DumbTokenizer(string sentence)
         {
-            var bigram = precedingWord + " " + currentWord;
+            var tokens = new List<string>();
+            string[] tokenArray;
+            tokenArray = Regex.Split(sentence.AddEdgeMarkers(), @"\s+");
+            tokens.AddRange(tokenArray);
+            return tokens;
+        }
+
+
+        public static string[] GenerateBigram(string precedingWord, string currentWord)
+        {
+            var bigram = new string[] { precedingWord, currentWord };
             return bigram;
         }
 
@@ -63,16 +56,15 @@ namespace Homework1.Core
         }
 
 
-        public static string AddEdgeMarkers(string bigramSet)
+        public static string AddEdgeMarkers(this string sentence)
         {
-            return "<s> " + bigramSet + " </s>";
+            return "<s> " + sentence + " </s>";
         }
 
 
-        public static string[] ReadFile(string _filePath)
+        public static string ReadFile(string _filePath)
         {
-            string[] corpus = File.ReadAllLines(_filePath);
-            return corpus;
+            return File.ReadAllText(_filePath);
         }
     }
 }
